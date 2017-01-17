@@ -6,8 +6,11 @@ const m = 58; // The number of values per series
 // Each yz[i] is an array of m non-negative numbers representing a y-value for xz[i]
 // The y01z array has the same structure as yz, but with stacked [y₀, y₁] instead of y
 const xz = d3.range(m);
+console.log('xz', xz);
 const yz = d3.range(n).map(() => bumps(m));
 const y01z = d3.stack().keys(d3.range(n))(d3.transpose(yz));
+console.log('d3.range(n)', d3.range(n));
+console.log('d3.transpose(yz)', d3.transpose(yz));
 
 const arrayOfObjects = [];
 
@@ -26,8 +29,12 @@ y01z.forEach((d, i) => {
 window.groupedData = y01z;
 window.data = arrayOfObjects;
 
+// grouped yMax
 const yMax = d3.max(yz, y => d3.max(y));
+// stacked yMax. this one is larger
 const y1Max = d3.max(y01z, y => d3.max(y, d => d[1]));
+console.log('yMax', yMax);
+console.log('y1Max', y1Max);
 
 const svg = d3.select('svg');
 const margin = {top: 40, right: 10, bottom: 20, left: 10};
