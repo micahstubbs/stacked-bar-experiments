@@ -20,20 +20,20 @@ function render(error, data) {
   console.log('m, the number of values per series', m);
 
   const svg = d3.select('svg');
-  const margin = {top: 40, right: 10, bottom: 20, left: 10};
+  const margin = {top: 20, right: 10, bottom: 20, left: 60};
   const width = +svg.attr('width') - margin.left - margin.right;
   const height = +svg.attr('height') - margin.top - margin.bottom;
   const g = svg.append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`);
 
+  const x = d3.scaleLinear()
+    .domain([0, xMaxStacked])
+    .range([0, width]);
+
   const y = d3.scaleBand()
     .domain(m)
-    .rangeRound([0, width])
+    .rangeRound([0, height])
     .padding(0.08);
-
-  const x = d3.scaleLinear()
-  .domain([0, xMaxStacked])
-    .range([height, 0]);
 
   const color = d3.scaleOrdinal()
     .domain(d3.range(n))
@@ -47,31 +47,32 @@ function render(error, data) {
   const rect = series.selectAll('rect')
     .data(d => d)
     .enter().append('rect')
-      .attr('x', width)
+      .attr('x', 0)
       .attr('y', (d, i) => y(i))
-      .attr('width', y.bandwidth())
-      .attr('height', 0);
+      .attr('width', 0)
+      .attr('height', y.bandwidth);
 
   rect.transition()
     .delay((d, i) => i * 10)
-    .attr('x', d => x(d[1]))
-    .attr('width', d => x(d[0]) - x(d[1]));
+    .attr('x', d => x(d[0]))
+    .attr('width', d => x(d[1]) - x(d[0]));
 
   g.append('g')
     .attr('class', 'axis axis--y')
-    .attr('transform', `translate(0,${width})`)
+    .attr('transform', `translate(0, 0)`)
     .call(d3.axisLeft(y)
       .tickSize(0)
-      .tickPadding(6));
+      .tickPadding(6)
+    );
 
   d3.selectAll('input')
     .on('change', changed);
 
-  const timeout = d3.timeout(() => {
-    d3.select('input[value=\'grouped\']')
-      .property('checked', true)
-      .dispatch('change');
-  }, 2000);
+  // const timeout = d3.timeout(() => {
+  //   d3.select('input[value=\'grouped\']')
+  //     .property('checked', true)
+  //     .dispatch('change');
+  // }, 2000);
 
   function changed() {
     timeout.stop();
