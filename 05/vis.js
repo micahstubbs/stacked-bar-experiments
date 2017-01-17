@@ -68,11 +68,11 @@ function render(error, data) {
   d3.selectAll('input')
     .on('change', changed);
 
-  // const timeout = d3.timeout(() => {
-  //   d3.select('input[value=\'grouped\']')
-  //     .property('checked', true)
-  //     .dispatch('change');
-  // }, 2000);
+  const timeout = d3.timeout(() => {
+    d3.select('input[value=\'grouped\']')
+      .property('checked', true)
+      .dispatch('change');
+  }, 2000);
 
   function changed() {
     timeout.stop();
@@ -91,8 +91,8 @@ function render(error, data) {
       })
       .attr('height', y.bandwidth() / n)
       .transition()
-        .attr('x', d => x(d[1] - d[0]))
-        .attr('width', d => x(0) - x(d[1] - d[0]));
+        .attr('x', d => x(0))
+        .attr('width', d => x(0) + x(d[1] - d[0]));
   }
 
   function transitionStacked() {
@@ -101,8 +101,8 @@ function render(error, data) {
     rect.transition()
       .duration(500)
       .delay((d, i) => i * 10)
-      .attr('x', d => x(d[1]))
-      .attr('width', d => x(d[0]) - x(d[1]))
+      .attr('x', d => x(d[0]))
+      .attr('width', d => x(d[1]) - x(d[0]))
       .transition()
         .attr('y', (d, i) => y(i))
         .attr('height', y.bandwidth());
