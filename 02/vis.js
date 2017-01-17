@@ -14,11 +14,13 @@ console.log('d3.transpose(yz)', d3.transpose(yz));
 
 const arrayOfObjects = [];
 
+var translator = new T2W("EN_US");
 // unstack
 y01z.forEach((d, i) => {
   d.forEach((e, j) => {
     if (typeof arrayOfObjects[j] === 'undefined') {
       arrayOfObjects[j] = {};
+      arrayOfObjects[j].name = translator.toWords(j);
     } 
     // calculate current value from y1 - y0
     const currentValue = e[1] - e[0]; 
@@ -159,3 +161,4 @@ function bumps(m) {
 
   return values;
 }
+
