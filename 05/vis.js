@@ -83,6 +83,8 @@ function render(error, data) {
       .dispatch('change');
   }, 2000);
 
+  // it looks like the error messages originate
+  // from the tweening that d3 does on the transition
   function changed() {
     timeout.stop();
     if (this.value === 'grouped') transitionGrouped();
