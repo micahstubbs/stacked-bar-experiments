@@ -29,7 +29,7 @@ const y = d3.scaleLinear()
 
 const color = d3.scaleOrdinal()
   .domain(d3.range(n))
-  .range(d3.schemeCategory20c);
+  .range(d3.schemeCategory20c.slice(8, 12)); // greens
 
 const series = g.selectAll('.series')
   .data(y01z)
