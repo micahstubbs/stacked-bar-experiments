@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<meta charset='utf-8'>
+<style>
+/* Radio button */
+.custom-radio input[type="radio"] {
+    display:none;
+}
+.custom-radio input[type="radio"] + label {
+    font-size:14px;
+    color: black;
+    cursor: pointer;
+}
+.custom-radio input[type="radio"] + label span {
+    display:inline-block;
+    width:10px;
+    height:10px;
+    margin:-1px 4px 0 0;
+    vertical-align:middle;
+    cursor:pointer;
+    -moz-border-radius:  50%;
+    border-radius:  50%;
+}
+.custom-radio input[type="radio"] + label span {
+    background-color: #c4c4c4; /* have to be of the same color */
+    border: 2px solid #c4c4c4; /* have to be of the same color */
+}
+/* Checked state for radio */
+.custom-radio input[type='radio']:checked + label span{
+     background-color: #31A354;
+}
+</style>
+<div class='custom-radio'>
+  <div>
+    <input type='radio' id='grouped' name='mode' value='grouped'>
+    <label for='grouped'><span></span> Grouped</label>
+  </div>
+  <div>
+    <input type='radio' id='stacked' name='mode' value='stacked' checked>
+    <label for='stacked'><span></span> Stacked</label>
+  </div>
+</div>
+<svg width='960' height='1200'></svg>
+<script src='d3.v4.js'></script>
+<script src='https://d3js.org/d3-queue.v2.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js'></script>
+<script src='vis.js' lang='babel' type='text/babel'></script>
