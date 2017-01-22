@@ -20,3 +20,4 @@ custom radio buttons from the codepen [Pure CSS & HTML cross-browser elegant Rad
 node module [number-to-words](https://www.npmjs.com/package/number-to-words) for, well, converting numbers to English words
 
 you can also view this set of experiments in [github repo form](https://github.com/micahstubbs/stacked-bar-experiments)  
+
