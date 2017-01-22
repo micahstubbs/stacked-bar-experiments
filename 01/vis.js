@@ -8,13 +8,14 @@ const m = 58; // The number of values per series
 const xz = d3.range(m);
 const yz = d3.range(n).map(() => bumps(m));
 const y01z = d3.stack().keys(d3.range(n))(d3.transpose(yz));
-const yMax = d3.max(yz, y => d3.max(y));
-const y1Max = d3.max(y01z, y => d3.max(y, d => d[1]));
+const yMaxGrouped = d3.max(yz, y => d3.max(y));
+const yMaxStacked = d3.max(y01z, y => d3.max(y, d => d[1]));
 
 const svg = d3.select('svg');
-const margin = {top: 40, right: 10, bottom: 20, left: 10};
+const controlHeight = 50;
+const margin = {top: 10, right: 10, bottom: 20, left: 10};
 const width = +svg.attr('width') - margin.left - margin.right;
-const height = +svg.attr('height') - margin.top - margin.bottom;
+const height = +svg.attr('height') - controlHeight - margin.top - margin.bottom;
 const g = svg.append('g')
   .attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -24,7 +25,7 @@ const x = d3.scaleBand()
   .padding(0.08);
 
 const y = d3.scaleLinear()
-  .domain([0, y1Max])
+  .domain([0, yMaxStacked])
   .range([height, 0]);
 
 const color = d3.scaleOrdinal()
@@ -72,7 +73,7 @@ function changed() {
 }
 
 function transitionGrouped() {
-  y.domain([0, yMax]);
+  y.domain([0, yMaxGrouped]);
 
   rect.transition()
     .duration(500)
@@ -87,7 +88,7 @@ function transitionGrouped() {
 }
 
 function transitionStacked() {
-  y.domain([0, y1Max]);
+  y.domain([0, yMaxStacked]);
 
   rect.transition()
     .duration(500)

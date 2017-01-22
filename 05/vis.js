@@ -24,9 +24,10 @@ queue
   console.log('m, the number of values per series', m);
 
   const svg = d3.select('svg');
-  const margin = {top: 40, right: 10, bottom: 20, left: 20};
+  const controlHeight = 50;
+  const margin = {top: 10, right: 10, bottom: 20, left: 20};
   const width = +svg.attr('width') - margin.left - margin.right;
-  const height = +svg.attr('height') - margin.top - margin.bottom;
+  const height = +svg.attr('height') - controlHeight - margin.top - margin.bottom;
   const g = svg.append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`);
 
