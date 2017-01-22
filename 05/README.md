@@ -12,3 +12,7 @@ an [ES2015](https://babeljs.io/learn-es2015/) implementation in something like t
 inspired by [Stacked-to-Grouped Bars](http://bl.ocks.org/mbostock/3943967) from [@mbostock](https://twitter.com/mbostock)
 
 custom radio buttons from the codepen [Pure CSS & HTML cross-browser elegant Radio Buttons](https://codepen.io/knitevision1/pen/NPjMzK) from [knitevision1](https://codepen.io/knitevision1/)
+
+you can also view this set of experiments in [github repo form](https://github.com/micahstubbs/stacked-bar-experiments)  
+
+👏 to [@alexmacy](https://twitter.com/alexmacy) for wading through a few thousand transition errors to help me find the data-prep [🐛](https://github.com/micahstubbs/stacked-bar-experiments/commit/2eb3e1cbc40fc127fdf79fde6a1acce406a4b00c) causing them all 

@@ -18,3 +18,5 @@ inspired by [Stacked-to-Grouped Bars](http://bl.ocks.org/mbostock/3943967) from 
 custom radio buttons from the codepen [Pure CSS & HTML cross-browser elegant Radio Buttons](https://codepen.io/knitevision1/pen/NPjMzK) from [knitevision1](https://codepen.io/knitevision1/)
 
 node module [number-to-words](https://www.npmjs.com/package/number-to-words) for, well, converting numbers to English words
+
+you can also view this set of experiments in [github repo form](https://github.com/micahstubbs/stacked-bar-experiments)  
