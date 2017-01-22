@@ -20,7 +20,7 @@ queue
   console.log('m, the number of values per series', m);
 
   const svg = d3.select('svg');
-  const margin = {top: 40, right: 10, bottom: 20, left: 10};
+  const margin = {top: 40, right: 10, bottom: 20, left: 20};
   const width = +svg.attr('width') - margin.left - margin.right;
   const height = +svg.attr('height') - margin.top - margin.bottom;
   const g = svg.append('g')
