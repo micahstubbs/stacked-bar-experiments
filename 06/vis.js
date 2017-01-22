@@ -5,12 +5,16 @@ queue
   .await(render);
 
 function render(error, data) {
+  const seriesKeys = Object.keys(data[0]).slice(0, Object.keys(data[0]).length - 1);
+  console.log('Object.keys(data[0])', Object.keys(data[0]));
+  console.log('seriesKeys', seriesKeys);
+
   const stackedData = d3.stack()
-    .keys(Object.keys(data[0]))(data);
+    .keys(seriesKeys)(data);
 
   const xMaxGrouped = d3.max(data, d => d3.max(Object.values(d).filter(e => typeof e !== 'string')));
   const xMaxStacked = d3.max(data, d => d3.sum(Object.values(d).filter(e => typeof e !== 'string')));
-  const n = Object.keys(data[0]).length - 1; // the number of series
+  const n = seriesKeys.length; // the number of series
   const yValuesDomain = d3.range(data.length); // the number of values per series
   const yLabelsDomain = stackedData[0].map(d => d.data.name);
 
@@ -64,7 +68,9 @@ function render(error, data) {
     .delay((d, i) => i * 10)
     .attr('x', d => x(d[0]))
     .attr('y', (d, i) => yValuesScale(i))
-    .attr('width', d => x(d[1]) - x(d[0]));
+    .attr('width', d => {
+      return x(d[1]) - x(d[0]);
+    });
 
   g.append('g')
     .attr('class', 'axis axis--y')
@@ -99,8 +105,8 @@ function render(error, data) {
       .duration(500)
       .delay((d, i) => i * 10)
       .attr('y', function(d, i) {
-        console.log('n from rect.transition', n);
-        //console.log('this.parentNode.__data__.key', d3.select(this.parentNode).data());
+        // console.log('n from rect.transition', n);
+        // console.log('this.parentNode.__data__.key', d3.select(this.parentNode).data());
         return yValuesScale(i) + yValuesScale.bandwidth() / n * +d3.select(this.parentNode).data()[0].index;
       })
       .attr('height', yValuesScale.bandwidth() / n)

@@ -5,8 +5,12 @@ queue
   .await(render);
 
   function render(error, data) {
+    const seriesKeys = Object.keys(data[0]).slice(0, Object.keys(data[0]).length - 1);
+    console.log('Object.keys(data[0])', Object.keys(data[0]));
+    console.log('seriesKeys', seriesKeys);
+
     const stackedData = d3.stack()
-      .keys(Object.keys(data[0]))(data);
+      .keys(seriesKeys)(data);
 
   const xMaxGrouped = d3.max(data, d => d3.max(Object.values(d)));
   const xMaxStacked = d3.max(data, d => d3.sum(Object.values(d)));
