@@ -5,7 +5,7 @@ animations preserve object constancy and allow the user to follow the data acros
 animation design by [Heer and Robertson](http://vis.berkeley.edu/papers/animated_transitions/)
 inspired by [Byron and Wattenberg](http://www.leebyron.com/else/streamgraph/)
 
-this iteration draws `vertical` bars from static data
+this iteration draws `vertical` bars from `static` data
 
 an [ES2015](https://babeljs.io/learn-es2015/) implementation in something like the [airbnb style](https://github.com/airbnb/javascript)
 

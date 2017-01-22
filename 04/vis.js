@@ -4,57 +4,64 @@ const m = 58; // The number of values per series
 // The xz array has m elements, representing the x-values shared by all series
 // The yz array has n elements, representing the y-values of each of the n series
 // Each yz[i] is an array of m non-negative numbers representing a y-value for xz[i]
-// The y01z array has the same structure as yz, but with stacked [y₀, y₁] instead of y
-const xz = d3.range(m);
-const yz = d3.range(n).map(() => bumps(m));
-const y01z = d3.stack().keys(d3.range(n))(d3.transpose(yz));
-const yMax = d3.max(yz, y => d3.max(y));
-const y1Max = d3.max(y01z, y => d3.max(y, d => d[1]));
+// The x01z array has the same structure as yz, but with stacked [y₀, y₁] instead of y
+const xz = d3.range(n).map(() => bumps(m));
+const yz = d3.range(m);
+const x01z = d3.stack().keys(d3.range(n))(d3.transpose(xz));
+const xMaxGrouped = d3.max(xz, x => d3.max(x));
+const xMaxStacked = d3.max(x01z, x => d3.max(x, d => d[1]));
+
+console.log('xz', xz);
+console.log('yz', yz);
+console.log('x01z', x01z);
+console.log('xMaxGrouped', xMaxGrouped);
+console.log('xMaxStacked', xMaxStacked);
 
 const svg = d3.select('svg');
-const margin = {top: 40, right: 10, bottom: 20, left: 10};
+const margin = {top: 40, right: 10, bottom: 20, left: 20};
 const width = +svg.attr('width') - margin.left - margin.right;
 const height = +svg.attr('height') - margin.top - margin.bottom;
 const g = svg.append('g')
   .attr('transform', `translate(${margin.left},${margin.top})`);
 
-const x = d3.scaleBand()
-  .domain(xz)
-  .rangeRound([0, width])
-  .padding(0.08);
+const x = d3.scaleLinear()
+  .domain([0, xMaxStacked])
+  .range([0, width]);
 
-const y = d3.scaleLinear()
-  .domain([0, y1Max])
-  .range([height, 0]);
+const y = d3.scaleBand()
+  .domain(yz)
+  .rangeRound([0, height])
+  .padding(0.08);
 
 const color = d3.scaleOrdinal()
   .domain(d3.range(n))
   .range(d3.schemeCategory20c.slice(8, 12)); // greens
 
 const series = g.selectAll('.series')
-  .data(y01z)
+  .data(x01z)
   .enter().append('g')
     .attr('fill', (d, i) => color(i));
 
 const rect = series.selectAll('rect')
   .data(d => d)
   .enter().append('rect')
-    .attr('x', (d, i) => x(i))
-    .attr('y', height)
-    .attr('width', x.bandwidth())
-    .attr('height', 0);
+    .attr('x', 0)
+    .attr('y', (d, i) => y(i))
+    .attr('width', 0)
+    .attr('height', y.bandwidth());
 
 rect.transition()
   .delay((d, i) => i * 10)
-  .attr('y', d => y(d[1]))
-  .attr('height', d => y(d[0]) - y(d[1]));
+  .attr('x', d => x(d[0]))
+  .attr('y', (d, i) => y(i))
+  .attr('width', d => x(d[1]) - x(d[0]));
 
 g.append('g')
-  .attr('class', 'axis axis--x')
-  .attr('transform', `translate(0,${height})`)
-  .call(d3.axisBottom(x)
-    .tickSize(0)
-    .tickPadding(6));
+  .attr('class', 'axis axis--y')
+    .attr('transform', `translate(0,0)`)
+    .call(d3.axisLeft(y)
+      .tickSize(0)
+      .tickPadding(6));
 
 d3.selectAll('input')
   .on('change', changed);
@@ -72,31 +79,31 @@ function changed() {
 }
 
 function transitionGrouped() {
-  y.domain([0, yMax]);
+  x.domain([0, xMaxGrouped]);
 
   rect.transition()
     .duration(500)
     .delay((d, i) => i * 10)
-    .attr('x', function(d, i) {
-      return x(i) + x.bandwidth() / n * this.parentNode.__data__.key;
+    .attr('y', function(d, i) {
+      return y(i) + y.bandwidth() / n * this.parentNode.__data__.key;
     })
-    .attr('width', x.bandwidth() / n)
+    .attr('height', y.bandwidth() / n)
     .transition()
-      .attr('y', d => y(d[1] - d[0]))
-      .attr('height', d => y(0) - y(d[1] - d[0]));
+      .attr('x', d => x(0))
+      .attr('width', d => x(0) + x(d[1] - d[0]));
 }
 
 function transitionStacked() {
-  y.domain([0, y1Max]);
+  x.domain([0, xMaxStacked]);
 
   rect.transition()
     .duration(500)
     .delay((d, i) => i * 10)
-    .attr('y', d => y(d[1]))
-    .attr('height', d => y(d[0]) - y(d[1]))
+    .attr('x', d => x(d[0]))
+    .attr('width', d => x(d[1]) - x(d[0]))
     .transition()
-      .attr('x', (d, i) => x(i))
-      .attr('width', x.bandwidth());
+      .attr('y', (d, i) => y(i))
+      .attr('height', y.bandwidth());
 }
 
 // Returns an array of m psuedorandom, smoothly-varying non-negative numbers.

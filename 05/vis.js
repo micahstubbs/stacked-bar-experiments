@@ -63,7 +63,7 @@ queue
     .attr('width', d => x(d[1]) - x(d[0]));
 
   g.append('g')
-    .attr('class', 'axis axis--x')
+    .attr('class', 'axis axis--y')
     .attr('transform', `translate(0,0)`)
     .call(d3.axisLeft(y)
       .tickSize(0)
